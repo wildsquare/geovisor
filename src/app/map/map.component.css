@@ -1,0 +1,43 @@
+.map {
+    width: 100%;
+    height: 400px;
+  }
+  .map {
+    background: #f8f4f0;
+  }
+
+  .loadFiles {
+    position: relative;
+ }
+  .loadFiles__header {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+ }
+  .loadFiles__header img {
+    max-width: 160px;
+ }
+  @media screen and (max-width: 480px) {
+    .loadFiles__header img {
+      max-width: 100px;
+   }
+ }
+  .loadFiles__header .secondary-icon-only {
+    height: 3rem;
+    width: 3rem;
+ }
+  .loadFiles__header .p-button-icon {
+    font-size: 1.2rem;
+ }
+  .loadFiles__dockItems ::ng-deep .p-dock .p-dock-link {
+    width: 3rem;
+    height: 3rem;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 0.5rem;
+ }
+  .loadFiles__dockItems ::ng-deep .p-dock .p-dock-link .i {
+    font-size: 1.8rem;
+ }
+  .loadFiles__dockItems ::ng-deep .p-dock .p-dock-link:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+ }

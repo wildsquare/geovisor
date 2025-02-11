@@ -1,0 +1,56 @@
+.cr-catalog {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+.cr-catalog__title {
+    position: relative;
+    padding: 0.5rem;
+    height: 2.5rem;
+}
+.cr-catalog__title .close {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+}
+.cr-catalog__content {
+    overflow-y: scroll;
+    flex: 1;
+    padding: 0.5rem;
+}
+.cr-catalog__content .title-18 {
+    font-weight: 400;
+    color: #fff;
+}
+.cr-catalog__content ::ng-deep.p-scrollpanel-content .p-tree {
+    padding: 0.25rem;
+}
+.cr-catalog__content ::ng-deep.p-scrollpanel-content .p-tree .p-treenode-content {
+    padding: 0.25rem;
+}
+.cr-catalog__footer {
+    padding: 0.5rem;
+    flex-direction: column;
+    flex-grow: 0;
+    height: 15rem;
+    display: flex;
+}
+.cr-catalog__footer .p-inputtext {
+    padding: 0.25rem;
+}
+.Catlogo-de-Servicio {
+    width: 208px;
+    height: 22px;
+    font-family: NeoSansStd;
+    font-size: 22px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #414b56;
+    margin-bottom: 20px;
+    margin-left: 15px;
+    margin-top: 10px;
+}

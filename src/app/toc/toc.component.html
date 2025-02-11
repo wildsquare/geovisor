@@ -1,0 +1,118 @@
+<article class="cr-layers">
+    <section class="cr-layers__title">
+        <h2 class="title-20">Capas</h2>
+        <p>Arbol de capas</p>
+    </section>
+    <section class="cr-layers__content">
+        <p-scrollPanel >
+            <p-table #tbllayers
+            [columns]="colsLayer" 
+            [value]="arrLayers" 
+            dataKey="ol_uid" 
+            selectionMode="single" 
+            [(selection)]="selectedLayer" 
+            (onRowSelect)="onRowSelect($event)"
+            (onRowUnselect)="onRowUnselect($event)"
+            [responsive]="true"
+            [metaKeySelection]="false">
+            <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-columns="columns" let-index="rowIndex">
+                <tr [pSelectableRow]="rowData" [pReorderableRow]="index" [pSelectableRowDisabled]="rowData.getProperties().layerProperties.disabled">
+                    <td class="simulate-list" *ngFor="let col of columns">
+                        <div class="flex align-items-center">                                     
+                            <i [pRowToggler]="rowData" class="2xl" [ngClass]="expanded ? 'pi pi-angle-up' : 'pi pi-angle-down'"></i>                   
+                            <h4 class="title-18 notranslate ml-2">{{rowData.getProperties().layerProperties.title}}</h4>
+                        </div>
+                        <div class="flex flex-grow-0"> 
+                            <span >
+                                <button pButton #btnDown 
+                                id="btnDown" 
+                                type="button"
+                                *ngIf="rowData.getProperties().layerProperties.last === false"
+                                (click)="onClickDown(rowData)">
+                                <i class="pi pi-arrow-down"  ></i> 
+                                </button>
+                            </span>
+                            <button pButton #btnUp 
+                                id="btnUp" 
+                                type="button"
+                                *ngIf="rowData.getProperties().layerProperties.first === false"
+                                (click)="onClickUp(rowData)">
+                                    <i class="pi pi-arrow-up"  ></i>
+                                </button>
+                               
+                            <span class="flex align-items-center ml-1" *ngIf="!rowData.getProperties().layerProperties.disabled" >
+                                <p-checkbox
+                                    [binary]="true" [inputId]="col"
+                                    [(ngModel)]="rowData.getProperties().layerProperties.visible"
+                                    (onChange)="handleChangeChk(rowData)"></p-checkbox>
+                            </span>
+                            <span class="flex align-items-center ml-1" *ngIf="rowData.getProperties().layerProperties.disabled">
+                                <p-checkbox 
+                                    [(ngModel)]="rowData.getProperties().layerProperties.visible"
+                                    (change)="handleChangeChk(rowData)"
+                                    disabled
+                                    ></p-checkbox>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-rowData let-columns="columns">
+                <tr>
+                    <td>
+                        <div class="flex">
+                            <div class="col-6">
+                                <h5 class="text-base f-weight-300 mb-2">Transparencia</h5>
+                                <p-slider [(ngModel)]="rowData.getProperties().layerProperties.opacity" [max]="100" [min]="0" [style]="{'padding':'3px'}" [animate]="true" (onChange)="hanleChangeSlide(rowData.getProperties().layerProperties.name,$event)"></p-slider>
+                            </div>
+                            <div class="col-6">
+                                <button pButton 
+                                    [disabled]="rowData.getProperties().layerProperties.legend === undefined"                            
+                                    type="button" 
+                                    class="cr-btn link-button small mb-1" 
+                                    label="Ver leyenda"
+                                    (click)="onClickLegend(rowData)">
+                                        <i class="pi pi-map mr-1"></i>
+                                </button>
+                                <button pButton 
+                                    [disabled]="rowData.getProperties().layerProperties.metadata === undefined"                               
+                                    type="button" 
+                                    class="cr-btn link-button small" 
+                                    label="Abrir metadatos"
+                                    (click)="onClickMetadata(rowData)">
+                                        <i class="pi pi-external-link mr-1"></i>
+                                </button>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+            </p-table>
+        </p-scrollPanel>
+    </section>
+    
+    <section class="cr-layers__footer">
+        <button pButton #btnCatalog id="btnCatalog" type="button" class="cr-btn primary" (click)="setCatalogComponent()" label="Abrir Catálogo"> </button>
+    </section>
+
+</article>
+<p-sidebar [modal] = "false" (onHide)="onHide()" [(visible)]="displayCatalog" position="right" [baseZIndex]="10000" [style]="{'width': '25%'}">
+    <label style="padding: 15px; font-weight: bold; font-size:16px; display: inline-block; text-shadow: 2px 2px rgba(0, 0, 0, 0.25)"> 
+        Catalogo de servicios 
+    </label> 
+    <div style = "padding-top: 10px;">
+        <!--<app-catalog #cmpCatalog></app-catalog>-->
+    </div>
+</p-sidebar>
+<p-sidebar [modal] = "false" [(visible)]="displayLegend" position="left" [baseZIndex]="10000" [style]="{'width': '25%'}">
+    <div class = "Leyenda-de-Presentac" style="margin-top: 40px; margin-left: 15px;">
+        <!--<img src='../../assets/resources/simbolo-rojo.png' height="35" width="35" style="padding-top: 10px; padding-right: 15px" >-->
+        <label #lblLeyenda></label> 
+    </div>
+    <p-scrollPanel [style]="{width: '100%', height: '100vh'}">
+        <div #divLegend style = "padding-top: 30px;" class="Leyenda-de-Presentac">
+            
+        </div>
+    </p-scrollPanel>
+</p-sidebar>

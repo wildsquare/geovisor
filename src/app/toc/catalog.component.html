@@ -1,0 +1,22 @@
+<article class="cr-catalog">
+    <section class="cr-catalog__title">
+          <h2 class="title-20">Añadir Catálogo</h2>
+          <button pButton class="cr-btn link-icon close" (click)="setTocComponent()" >
+              <i class="pi icon-xl pi-times" ></i>
+          </button>
+      </section>
+      <section class="cr-catalog__content scrollBar">
+        <p-scrollPanel >
+          <p-tree  [value]="filesTree" [(selection)]="selectedServices" selectionMode="checkbox" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)"></p-tree>
+        </p-scrollPanel>
+        
+      </section>
+      <section class="cr-catalog__footer">
+        <h3 class="title-20 mb-2">Añadir Capas desde Catálogo</h3>
+        <p-dropdown class="mb-1" #drptype [options]="groupedType" placeholder="Grupo"></p-dropdown>
+        <p-dropdown class="mb-1" #drpscope [options]="groupedScope" placeholder="Ambito"></p-dropdown>
+        <input class="mb-1" #inpurl type="text" pInputText placeholder="Url">      
+        <input class="mb-1" #inptitle type="text" pInputText placeholder="Título">  
+        <button pButton class="cr-btn primary" type="button" label="Añadir" (click)="handleClick()"></button>
+        </section>
+  </article>

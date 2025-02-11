@@ -1,0 +1,21 @@
+<div>
+	<div >
+		<img src="../../../assets/resources/logo.png" style="height: 8vh;">
+	</div>
+</div>
+<div id="map" style="height: 89vh; width: 99vw;" #map>
+    <p-sidebar [(visible)]="tocVisible" position="right">
+        <app-toc-menu></app-toc-menu>
+    </p-sidebar>
+    <p-dock [model]="dockItems" position="bottom" class="loadFiles__dockItems">
+        <ng-template pTemplate="item" let-item>
+          <span               
+              [pTooltip]="item.label"
+              
+              tooltipPosition="top"
+              tooltipZIndex="4000">
+              <i class="pi" [class]="item.icon"></i>
+        </span>
+        </ng-template>
+    </p-dock>
+</div>
