@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import OlWKT from 'ol/format/WKT';
 import OlGeoJson from 'ol/format/GeoJSON';
 import OlGML3 from 'ol/format/GML3';
-import { Feature as OlFeature } from 'ol';
+import { Feature, Feature as OlFeature } from 'ol';
 import { Geometry as OlGeometry, Polygon } from 'ol/geom';
 import { extend as OlExtend } from 'ol/extent';
 import * as OlProj from 'ol/proj';
@@ -33,10 +33,10 @@ OlProj4.register(proj4);
 })
 export class UtilsService {
 
-    appName: string;
-    wktFormat: OlWKT;
-    gmlFormat: OlGML3;
-    geojsonFormat: OlGeoJson;
+    appName!: string;
+    wktFormat!: OlWKT;
+    gmlFormat!: OlGML3;
+    geojsonFormat!: OlGeoJson;
     proj = OlProj;
 
     /** En local sin servidor */
@@ -60,23 +60,23 @@ export class UtilsService {
     startLoadingPanel = new Subject<string>();
     public startLoadingPanel$ = this.startLoadingPanel.asObservable();
 
-    urlServicesConflicts: string;
-    urlServicesDistrict: string;
-    urlServicesRegistry: string;
-    urlServicesCadastre: string;
-    urlServicesEmergency: string;
-    urlServicesRcentral: string;
-    urlServicesPwvg: string;
-    urlServicesUtils: string;
-    urlServicesBase: string;
-    urlServicesGdatacore: string;
+    urlServicesConflicts!: string;
+    urlServicesDistrict!: string;
+    urlServicesRegistry!: string;
+    urlServicesCadastre!: string;
+    urlServicesEmergency!: string;
+    urlServicesRcentral!: string;
+    urlServicesPwvg!: string;
+    urlServicesUtils!: string;
+    urlServicesBase!: string;
+    urlServicesGdatacore!: string;
 
     constructor() {
     }
 
-    groupBy(list, keyGetter) {
-        const map = new Map();
-        list.forEach((item) => {
+    groupBy<T, K>(list: T[], keyGetter: (item: T) => K): Map<K, T[]> {
+        const map = new Map<K, T[]>();
+        list.forEach((item: T) => {
             const key = keyGetter(item);
             const collection = map.get(key);
             if (!collection) {
@@ -90,7 +90,13 @@ export class UtilsService {
 
     transformCoordOlFeature(inEpsg: string, outEpsg: string, feature: OlFeature): OlFeature {
         const geom = feature.getGeometry();
-        feature.setGeometry(geom.transform(this.proj.get(inEpsg), this.proj.get(outEpsg)));
+        if (geom) {
+            const inProj = this.proj.get(inEpsg);
+            const outProj = this.proj.get(outEpsg);
+            if (inProj && outProj) {
+                feature.setGeometry(geom.transform(inProj, outProj));
+            }
+        }
         return feature;
     }
 
@@ -155,16 +161,15 @@ export class UtilsService {
         return new Blob([data], { type: 'image/png' });
     }
 
-    save_image_file(bytes): string {
+    save_image_file(bytes: string): string {
         const bytesImage = atob(bytes);
         const arrayImage = new Uint8Array(bytesImage.length);
         for (let i = 0; i < bytesImage.length; i++) {
             arrayImage[i] = bytesImage.charCodeAt(i);
         }
-        const blob = new Blob([arrayImage], {type: 'image/png'});
+        const blob = new Blob([arrayImage], { type: 'image/png' });
 
         return window.URL.createObjectURL(blob);
-
     }
 
     getXmlFile(data: any): Blob {
@@ -180,12 +185,18 @@ export class UtilsService {
 
         if (srs !== this.epsg) {
             if ((this.epsg === 'EPSG:3857') && (srs.includes('EPSG:258'))) {
-                let auxFeature2 = auxFeature.getGeometry().transform(srs, 'EPSG:4258');
-                auxFeature2 = auxFeature2.transform('EPSG:4258', this.epsg);
-                auxFeature.setGeometry(auxFeature2);
+                const geometry = auxFeature.getGeometry();
+                if (geometry) {
+                    let auxFeature2 = geometry.transform(srs, 'EPSG:4258');
+                    auxFeature2 = auxFeature2.transform('EPSG:4258', this.epsg);
+                    auxFeature.setGeometry(auxFeature2);
+                }
             } else {
-                const auxFeature2 = auxFeature.getGeometry().transform(srs, this.epsg);
-                auxFeature.setGeometry(auxFeature2);
+                const geometry = auxFeature.getGeometry();
+                if (geometry) {
+                    const auxFeature2 = geometry.transform(srs, this.epsg);
+                    auxFeature.setGeometry(auxFeature2);
+                }
             }
         }
         return auxFeature;
@@ -259,7 +270,7 @@ export class UtilsService {
         return this.wktFormat.writeGeometry(geom);
     }
 
-    createGeomPoint(lon, lat): Point {
+    createGeomPoint(lon: number, lat: number): Point {
         return new Point([lon, lat]);
     }
 
@@ -285,41 +296,19 @@ export class UtilsService {
         return arrReturn;
     }
 
-    centerToExtentFeatures(features, epsg): number[] {
-        let extZoom = null;
-        let geometry = null;
-        const center = new Array<number>();
-        features.map((feature) => {
-            if (feature.geometry) {
-                geometry = feature.geometry;
-            } else {
-                geometry = feature.geom;
-            }
-            const feat = this.getFeatureFromWkt(geometry, epsg);
-            if (extZoom) {
-                extZoom = OlExtend(extZoom, feat.getGeometry().getExtent());
-            } else {
-                extZoom = feat.getGeometry().getExtent();
-            }
-        });
-        center.push(extZoom[0] + (extZoom[2] - extZoom[0]) / 2);
-        center.push(extZoom[1] + (extZoom[3] - extZoom[1]) / 2);
-        return center;
-    }
-
     setImageFeature(feature: OlFeature, size: number) {
         this.setImageFeatureEvent.next([feature, size]);
     }
 
-    setImageLayer(layer, size: number) {
+    setImageLayer(layer: OlFeature, size: number): void {
         this.setImageLayerEvent.next([layer, size]);
     }
 
-    getImageFeature(img) {
+    getImageFeature(img: any): void {
         this.getImageFeatureEvent.next(img);
     }
 
-    getImageLayer(img) {
+    getImageLayer(img: any): void {
         this.getImageLayerEvent.next(img);
     }
 
@@ -383,8 +372,12 @@ export class UtilsService {
      */
     getEwktFromOlFeature(feature: OlFeature): string {
         this.wktFormat = new OlWKT();
-        this.wktFormat.writeGeometry(feature.getGeometry());
-        return `SRID=${this.epsg.split(':')[1]};${this.wktFormat.writeGeometry(feature.getGeometry())}`;
+        const geometry = feature.getGeometry();
+        if (!geometry) {
+            throw new Error('Feature geometry is undefined');
+        }
+        const wktGeometry = this.wktFormat.writeGeometry(geometry);
+        return `SRID=${this.epsg.split(':')[1]};${wktGeometry}`;
     }
 
     getWktFromEwkt(ewkt: string) {
@@ -398,8 +391,12 @@ export class UtilsService {
     }
 
     getCenterFromOlFeature(feature: OlFeature): [number, number] {
-        return this.getCenterFromOlGeometry(feature.getGeometry());
-    }
+            const geometry = feature.getGeometry();
+            if (!geometry) {
+                throw new Error('Feature geometry is undefined');
+            }
+            return this.getCenterFromOlGeometry(geometry);
+        }
 
     getCenterFromOlGeometry(geometry: OlGeometry): [number, number] {
         const ext = geometry.getExtent();
@@ -495,7 +492,39 @@ export class UtilsService {
         return `${baseCardName}${suffix}`;
     }
 
-    setLayerProperties(name, title, type, visible, visibleToc?, queryable?, info?, legend?, metadata?): LayerProperties {
+    centerToExtentFeatures(features: Feature[], epsg: string): number[] {
+        let extZoom: number[] | null = null;
+        let geometry = null;
+        const center = new Array<number>();
+        features.map((feature) => {
+            if (feature.getGeometry()) {
+                geometry = feature.getGeometry();
+            } else {
+                geometry = feature.getGeometry();
+            }
+            if (extZoom) {
+                const geometry = feature.getGeometry();
+                if (geometry) {
+                    extZoom = OlExtend(extZoom, geometry.getExtent());
+                }
+            } else {
+                const geometry = feature.getGeometry();
+                if (geometry) {
+                    extZoom = geometry.getExtent();
+                }
+            }
+        });
+        if (extZoom) {
+            center.push(extZoom[0] + (extZoom[2] - extZoom[0]) / 2);
+            center.push(extZoom[1] + (extZoom[3] - extZoom[1]) / 2);
+        }
+        return center;
+    }
+
+    setLayerProperties(
+        name: string, title: string, type: string, visible: boolean, visibleToc?: boolean,
+        queryable?: boolean, info?: boolean, legend?: string[], metadata?: string[]
+    ): LayerProperties {
         const propLayer = new LayerProperties();
         propLayer.name = name;
         propLayer.title = title;

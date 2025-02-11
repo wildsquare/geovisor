@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import Map from 'ol/Map';
-import { Collection, Feature as OlFeature } from 'ol';
-import { extend as OlExtend } from 'ol/extent';
+import { Collection, Feature, Feature as OlFeature } from 'ol';
+import { Extent, extend as OlExtend } from 'ol/extent';
 import { altKeyOnly, click } from 'ol/events/condition';
 import { Draw, Modify, Snap, Select, Translate, DoubleClickZoom } from 'ol/interaction';
 import { LayersService } from './layers.service';
@@ -16,21 +16,21 @@ export class MapService {
 
     selectedType: string;
 
-    typeCadastreFeature: string;
-    errorFeature: string;
+    typeCadastreFeature!: string;
+    errorFeature!: string;
 
-    olFeatureSelect: OlFeature;
+    olFeatureSelect!: OlFeature;
 
     contNewFeature: number;
 
-    mapResolution: number;
+    mapResolution!: number;
 
-    select: Select;
-    draw: Draw;
-    snap: Snap;
-    modify: Modify;
-    translate: Translate;
-    deleteVertex: Modify;
+    select!: Select;
+    draw!: Draw;
+    snap!: Snap;
+    modify!: Modify;
+    translate!: Translate;
+    deleteVertex!: Modify;
 
 
     getArrayFeatures = new Subject();
@@ -45,15 +45,15 @@ export class MapService {
     getMapResolution = new Subject<number>();
     public getMapResolution$ = this.getMapResolution.asObservable();
 
-    actionFeatures: Subscription = null;
-    actionEditFeature: Subscription = null;
-    actionGetArrConflicts: Subscription = null;
-    actionGeoinscriptionFeatures: Subscription = null;
-    actionGeopresentationFeatures: Subscription = null;
-    actionGeoboeFeatures: Subscription = null;
-    actionGetAnalizedFeatures: Subscription = null;
+    actionFeatures: Subscription = new Subscription();
+    actionEditFeature: Subscription = new Subscription();
+    actionGetArrConflicts: Subscription = new Subscription();
+    actionGeoinscriptionFeatures: Subscription = new Subscription();
+    actionGeopresentationFeatures: Subscription = new Subscription();
+    actionGeoboeFeatures: Subscription = new Subscription();
+    actionGetAnalizedFeatures: Subscription = new Subscription();
 
-    map: Map;
+    map!: Map;
 
     constructor(
         private layerService: LayersService,
@@ -99,11 +99,11 @@ export class MapService {
         if (geom.getType() === 'GeometryCollection') {
             extZoom = geom.getExtent();
         } else {
-            extZoom = geom;
+            extZoom = geom.getExtent();
         }
 
         this.map.getView().fit(
-            extZoom,
+            extZoom as Extent,
             {
                 size: this.map.getSize(),
                 padding: [200, 100, 100, 300],
@@ -127,7 +127,7 @@ export class MapService {
         });
     }
 
-    clearLyr(layerName) {
+    clearLyr(layerName: string): void {
         const layer = this.layerService.getLayerBy(this.map, 'name', layerName);
         if (layer) {
             layer.getSource().clear();
@@ -135,9 +135,7 @@ export class MapService {
         }
     }
 
-    addMarker(lon, lat, type, clean) {
-    // console.log('lon:', lon);
-    // console.log('lat:', lat);
+    addMarker(lon: number, lat: number, type: string, clean: boolean): void {
         if (clean === true) {
             this.layerService.vSourceMarkers.clear();
         }
@@ -148,13 +146,13 @@ export class MapService {
         this.layerService.vSourceMarkers.addFeature(iconFeature);
     }
 
-    getFeatureToAdvanceEdit(editfeature) {
+    getFeatureToAdvanceEdit(editfeature: OlFeature) {
         this.cleanEditLayer();
         this.layerService.vSourceEdit.addFeature(editfeature);
     }
 
-    setTranslateInteraction(features, type) {
-        this.select = new Select({features});
+    setTranslateInteraction(features: OlFeature, type: string) {
+        this.select = new Select({features: new Collection([features])});
         this.map.addInteraction(this.select);
         this.translate = new Translate({features: this.select.getFeatures()});
         this.map.addInteraction(this.translate);
@@ -175,12 +173,12 @@ export class MapService {
 
 
     /** Zooms de Mapa */
-    zoomToPoint(point, zoom) {
+    zoomToPoint(point: [number, number], zoom: number): void {
         this.map.getView().setCenter(point);
         this.map.getView().setZoom(zoom);
     }
 
-    zoomToExtentLayer(layerName, padding) {
+    zoomToExtentLayer(layerName: string, padding: [number, number, number, number]): void {
         const layer = this.layerService.getLayerBy(this.map, 'name', layerName);
         this.map.getView().fit(
             layer.getSource().getExtent(),
@@ -192,52 +190,36 @@ export class MapService {
         );
     }
 
-    zoomCadastreFeatures(features, epsg) {
-        let extZoom = null;
-
-        features.features.map((feature) => {
-            const feat = this.utilsService.getFeatureFromWkt(feature.geom, epsg);
-            if (extZoom) {
-                extZoom = OlExtend(extZoom, feat.getGeometry().getExtent());
-            } else {
-                extZoom = feat.getGeometry().getExtent();
-            }
-        });
-
-        if (extZoom) {
-            this.zoomExtent(extZoom);
-        }
-    }
-
-    zoomFeatures(features, epsg) {
-
-        let extZoom = null;
-
-        features.map((feature) => {
-            const feat = this.utilsService.getFeatureFromWkt(feature.geometry, epsg);
-            if (extZoom) {
-                extZoom = OlExtend(extZoom, feat.getGeometry().getExtent());
-            } else {
-                extZoom = feat.getGeometry().getExtent();
-            }
-        });
-
-        if (extZoom) {
-            this.zoomExtent(extZoom);
-        }
-
-    }
-
-    zoomExtent(extZoom) {
+    zoomExtent(extZoom: any): void {
         const self = this;
         this.map.getView().fit(
-            extZoom,
+            extZoom as Extent,
             {
                 size: self.map.getSize(),
                 padding: [200, 100, 100, 300],
                 nearest: false
             }
         );
+    }
+
+    zoomFeature(feature: Feature) {
+        const geometry = feature.getGeometry();
+        let extZoom;
+        if (geometry) { 
+            if (geometry.getType() === 'GeometryCollection') {
+                extZoom = geometry.getExtent();
+            } else {
+                extZoom = geometry;
+            }
+            this.map.getView().fit(
+                extZoom as Extent,
+                {
+                    size: this.map.getSize(),
+                    padding: [50, 50, 50, 50],
+                    nearest: false
+                }
+            );
+        }
     }
 
     fitRefresh() {

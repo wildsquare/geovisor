@@ -1,0 +1,35 @@
+<article class="cr-layers">
+    <section class="cr-layers__content">
+        <p-scrollPanel >
+            <p-table [columns]="cols" [value]="projects" dataKey="name" 
+                selectionMode="single" 
+                [metaKeySelection]="false"
+                (onRowSelect)="onRowSelect($event.data)">
+                <ng-template #body let-rowData let-expanded="expanded" let-columns="columns" let-index="rowIndex">
+                    <tr style="background-image: url('./assets/resources/biodiversidad.jpg');
+                    background-size: cover;
+                    background-repeat: no-repeat;">
+                        <td [pSelectableRow]="rowData">
+                            <div class="flex align-items-center text-sm" >                               
+                                <p-button type="button" [pRowToggler]="rowData" pRipple [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />                 
+                                {{ rowData.title }}
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template #expandedrow let-rowData let-columns="columns">
+                    <tr>
+                        <td>
+                            <div class="col-12 text-sm">
+                                {{ rowData.type }} {{rowData.parcels.length}} Parcelas
+                            </div>
+                            <div class="col-12 text-sm">
+                                Fecha de Inicio: 01/05/2024
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-scrollPanel>
+    </section>
+</article>

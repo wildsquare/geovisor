@@ -1,22 +1,27 @@
-<article class="cr-catalog">
-    <section class="cr-catalog__title">
-          <h2 class="title-20">Añadir Catálogo</h2>
-          <button pButton class="cr-btn link-icon close" (click)="setTocComponent()" >
-              <i class="pi icon-xl pi-times" ></i>
-          </button>
-      </section>
-      <section class="cr-catalog__content scrollBar">
-        <p-scrollPanel >
-          <p-tree  [value]="filesTree" [(selection)]="selectedServices" selectionMode="checkbox" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)"></p-tree>
+<article class="cr-catalog scrollBar">
+  <p-tabs value="0">
+    <p-tablist>
+        <p-tab value="0">Catálogo</p-tab>
+        <p-tab value="1">Añadir Catálogo</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+      <p-tabpanel value="0">
+        <p-scrollPanel>
+          <section class="cr-catalog__content">
+            <p-tree  [value]="filesTree" [(selection)]="selectedServices" selectionMode="checkbox" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)"></p-tree>
+            <p-button pButton class="cr-btn primary" type="button" label="Cargar / Descargar" (click)="addLayerFromCatalog()"></p-button>
+          </section>
         </p-scrollPanel>
-        
-      </section>
-      <section class="cr-catalog__footer">
-        <h3 class="title-20 mb-2">Añadir Capas desde Catálogo</h3>
-        <p-dropdown class="mb-1" #drptype [options]="groupedType" placeholder="Grupo"></p-dropdown>
-        <p-dropdown class="mb-1" #drpscope [options]="groupedScope" placeholder="Ambito"></p-dropdown>
-        <input class="mb-1" #inpurl type="text" pInputText placeholder="Url">      
-        <input class="mb-1" #inptitle type="text" pInputText placeholder="Título">  
-        <button pButton class="cr-btn primary" type="button" label="Añadir" (click)="handleClick()"></button>
+      </p-tabpanel>
+      <p-tabpanel value="1">
+        <section class="cr-catalog__footer">
+          <p-select class="mb-1" [(ngModel)]="selectedType" #drptype [options]="groupedType" optionLabel="label" placeholder="Grupo"></p-select>
+          <p-select class="mb-1" [(ngModel)]="selectedScope" [options]="groupedScope"  optionLabel="label" placeholder="Ambito"></p-select>
+          <input class="mb-1" #inpurl type="text" pInputText placeholder="Url">      
+          <input class="mb-1" #inptitle type="text" pInputText placeholder="Título">  
+          <p-button pButton class="cr-btn primary" type="button" label="Añadir" (click)="handleClick()"></p-button>
         </section>
-  </article>
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+</article>

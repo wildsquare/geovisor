@@ -1,21 +1,51 @@
 <div>
-	<div >
-		<img src="../../../assets/resources/logo.png" style="height: 8vh;">
-	</div>
+	<div style="padding-left: 10px; padding-top: 10px;">
+		<img src="./assets/resources/logo.png" style="height: 8vh;">
+    </div>
 </div>
-<div id="map" style="height: 89vh; width: 99vw;" #map>
-    <p-sidebar [(visible)]="tocVisible" position="right">
-        <app-toc-menu></app-toc-menu>
-    </p-sidebar>
+<section #map id="map" appDnd (fileDropped)="onFileDropped($event)" (showBanner)="loadBanner($event)" class="map">
+    <div #banner class="banner-off">
+        <app-dnd-files></app-dnd-files>
+    </div>
+    <p-dialog [(visible)]="tocVisible" [modal]="false" [position]="'right'" styleClass="w-25rem">
+        <ng-template pTemplate="header">
+            <span class="font-semibold text-m">Capas</span>
+        </ng-template>
+        <app-toc></app-toc>
+    </p-dialog>
+    <p-dialog [(visible)]="proyectsVisible" [modal]="false" [position]="'center'" styleClass="w-25rem">
+        <ng-template pTemplate="header">
+            <span class="font-semibold text-m">Proyectos</span>
+        </ng-template>
+        <app-projects></app-projects>
+    </p-dialog>
+    <p-dialog [(visible)]="catalogVisible" [modal]="false" [position]="'right'" styleClass="w-25rem">
+        <ng-template pTemplate="header">
+            <span class="font-semibold text-m">Catálogo</span>
+        </ng-template>
+        <app-catalog></app-catalog>
+    </p-dialog>
+    <p-dialog [(visible)]="parcelsVisible" [modal]="false" [position]="'left'" styleClass="w-25rem">
+        <ng-template pTemplate="header">
+            <span class="font-semibold text-m">Parcelas</span>
+        </ng-template>
+        <p-toolbar>
+            <ng-template class="text-sm" #center>
+                <p-button label="Añadir" text plain />
+                <p-button label="Buscar" text plain />
+                <p-button label="Eliminar" text plain />
+            </ng-template>
+        </p-toolbar>
+        <app-parcels></app-parcels>
+    </p-dialog>
     <p-dock [model]="dockItems" position="bottom" class="loadFiles__dockItems">
         <ng-template pTemplate="item" let-item>
           <span               
               [pTooltip]="item.label"
-              
               tooltipPosition="top"
               tooltipZIndex="4000">
               <i class="pi" [class]="item.icon"></i>
         </span>
         </ng-template>
     </p-dock>
-</div>
+</section>

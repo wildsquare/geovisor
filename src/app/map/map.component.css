@@ -1,6 +1,6 @@
 .map {
-    width: 100%;
-    height: 400px;
+  height: 89vh;
+  width: 99vw;
   }
   .map {
     background: #f8f4f0;
@@ -14,9 +14,22 @@
     top: 2rem;
     left: 2rem;
  }
-  .loadFiles__header img {
+.loadFiles__header img {
     max-width: 160px;
  }
+
+ .banner-off {
+  z-index: 0;
+  position: absolute;
+  visibility: hidden;
+}
+
+.banner-on {
+  z-index: 100;
+  position: absolute;
+  visibility: visible;
+}
+
   @media screen and (max-width: 480px) {
     .loadFiles__header img {
       max-width: 100px;
@@ -41,3 +54,5 @@
   .loadFiles__dockItems ::ng-deep .p-dock .p-dock-link:hover {
     background-color: rgba(255, 255, 255, 0.8);
  }
+
+

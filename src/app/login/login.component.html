@@ -1,0 +1,23 @@
+<div class="flex justify-center items-center min-h-screen bg-gray-100" style="background-image:url('/assets/resources/natur.2');">
+    <p-card class="max-w-sm p-4 shadow-lg">
+        <img src="../../assets/resources/logo.png" style="height: 8vh;">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div style="margin-inline: 20px;">
+          <label for="username" class="block text-sm font-medium text-gray-700">Usuario</label>
+          <input id="username" pInputText formControlName="username" class="w-full p-2 border rounded"/>
+          <small *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="text-red-500">
+            Usuario requerido
+          </small>
+        </div>
+        <div style="margin: 20px;">
+          <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+          <p-password id="password" formControlName="password" class="w-full" [feedback]="false"></p-password>
+          <small *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-red-500">
+            Contraseña requerida (mínimo 6 caracteres)
+          </small>
+        </div>
+        <button pButton type="submit" label="Ingresar" class="w-full" [disabled]="loginForm.invalid"></button>
+        <p class="text-center text-red-500" *ngIf="loginError()">Credenciales inválidas</p>
+      </form>
+    </p-card>
+  </div>

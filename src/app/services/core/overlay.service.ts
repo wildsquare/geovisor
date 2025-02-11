@@ -21,19 +21,19 @@ interface OverlayConfig {
 })
 export class OverlayService {
 
-  overlaySynopticRef: OverlayRef;
-  overlayCaptchaNoteRef: OverlayRef;
-  overlayDownloadFeaturesRef: OverlayRef;
-  overlayPrincipalMenuRef: OverlayRef;
-  overlaySearcherMenuRef: OverlayRef;
-  overlaySearcherMobileRef: OverlayRef;
-  overlayMapMenuRef: OverlayRef;
-  overlayTocRef: OverlayRef;
-  overlayErrorFeatureRef: OverlayRef;
-  overlayCookieChooseRef: OverlayRef;
+  overlaySynopticRef!: OverlayRef;
+  overlayCaptchaNoteRef!: OverlayRef;
+  overlayDownloadFeaturesRef!: OverlayRef;
+  overlayPrincipalMenuRef!: OverlayRef;
+  overlaySearcherMenuRef!: OverlayRef;
+  overlaySearcherMobileRef!: OverlayRef;
+  overlayMapMenuRef!: OverlayRef;
+  overlayTocRef!: OverlayRef;
+  overlayErrorFeatureRef!: OverlayRef;
+  overlayCookieChooseRef!: OverlayRef;
 
-  isDesktop: boolean;
-  actionIsDesktop: Subscription = null;
+  isDesktop!: boolean;
+  actionIsDesktop: Subscription = new Subscription();
   mediaQueryList: any;
 
   constructor(
@@ -63,7 +63,6 @@ export class OverlayService {
   hideOverlayTocRef() {
     if (this.overlayTocRef) {
       this.overlayTocRef.dispose();
-      this.overlayTocRef = null;
     }
   }
 

@@ -8,7 +8,7 @@ import { TocComponent } from '../toc/toc.component';
     styleUrls: ['./toc-menu.component.css']
 })
 export class TocMenuComponent implements OnInit {
-  @ViewChild('tocMenuDiv', {static: true, read: ViewContainerRef}) tocMenuDiv: ViewContainerRef;
+  @ViewChild('tocMenuDiv', {static: true, read: ViewContainerRef}) tocMenuDiv!: ViewContainerRef;
 
   constructor(private componentsService: ComponentsService) { }
 

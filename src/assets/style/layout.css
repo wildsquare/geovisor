@@ -18,7 +18,7 @@
   
   .i-holes .path1:before {
     content: "\e902";
-    color: #AF1E2D;
+    color: #009E92;
   }
   
   .i-holes .path2:before {
@@ -30,7 +30,7 @@
   .i-holes .path3:before {
     content: "\e904";
     margin-left: -1em;
-    color: #AF1E2D;
+    color: #009E92;
   }
   
   .i-select-all:before {
@@ -313,6 +313,11 @@
     font-size: 1rem;
     line-height: 1.5rem;
   }
+
+  .text-m {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
   
   .text-sm {
     font-size: .875rem;
@@ -350,7 +355,7 @@
   }
   
   .primary {
-    color: #AF1E2D;
+    color: #009E92;
   }
   
   body {
@@ -406,16 +411,16 @@
   }
   
   .p-slider .p-slider-range {
-    background-color: #AF1E2D;
+    background-color: #009E92;
   }
   
   .p-slider .p-slider-handle {
-    border-color: #AF1E2D;
+    border-color: #009E92;
   }
   
   ::ng-deep.p-selectbutton .p-button.p-state-active, ::ng-deep.p-selectbutton .p-button.p-highlight, ::ng-deep.p-selectbutton .p-button.p-highlight:not(.p-disabled):hover {
-    border-color: #AF1E2D;
-    background-color: #AF1E2D;
+    border-color: #009E92;
+    background-color: #009E92;
   }
   
   /** reset radiobutton **/
@@ -423,8 +428,8 @@
   ::ng-deep .p-radiobutton .p-radiobutton-box.p-state-active,
   ::ng-deep .p-radiobutton .p-radiobutton-box.p-highlight,
   ::ng-deep .p-radiobutton .p-radiobutton-box.p-highlight:not(.p-disabled):hover {
-    border-color: #AF1E2D;
-    background-color: #AF1E2D;
+    border-color: #009E92;
+    background-color: #009E92;
   }
   
   ::ng-deep .p-checkbox .p-checkbox-box:not(.p-disabled).p-focus,
@@ -432,7 +437,7 @@
     outline: 0 none;
     outline-offset: 0;
     box-shadow: 0 0 0 0.2rem #D8B1B5;
-    border-color: #AF1E2D;
+    border-color: #009E92;
   }
   
   /** reset  acordion / collapsible / toggleable **/
@@ -454,8 +459,8 @@
   
   ::ng-deep .p-radiobutton .p-radiobutton-box.p-state-active:hover,
   ::ng-deep .p-button:hover {
-    background-color: #AF1E2D;
-    border-color: #7D000D;
+    background-color: #009E92;
+    border-color: #009E9E;
   }
   
   /** reset dropdown */
@@ -481,7 +486,7 @@
   
   ::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
     background-color: #fff;
-    color: #AF1E2D;
+    color: #009E92;
   }
   
   /* contex colors*/
@@ -542,15 +547,15 @@
   }
   
   .bg-primary {
-    background-color: #AF1E2D;
+    background-color: #009E92;
   }
   
   .bg-primary-dark-1 {
-    background-color: #7D000D;
+    background-color: #009E9E;
   }
   
   .bg-primary-dark-2 {
-    background-color: #380000;
+    background-color: #003800;
   }
   
   .bg-primary-light-1 {
@@ -590,15 +595,15 @@
   }
   
   .color-primary {
-    color: #AF1E2D;
+    color: #009E92;
   }
   
   .color-primary-dark-1 {
-    color: #7D000D;
+    color: #009E9E;
   }
   
   .color-primary-dark-2 {
-    color: #380000;
+    color: #003800;
   }
   
   .color-primary-light-1 {
@@ -844,27 +849,27 @@
   
   ::ng-deep .cr-btn.toggle-primary .p-togglebutton.p-button.p-highlight,
   ::ng-deep .cr-btn.toggle-primary .p-togglebutton.p-button, ::ng-deep .cr-btn.primary {
-    background-color: #AF1E2D;
+    background-color: #009E92;
     color: white;
   }
   
   ::ng-deep .cr-btn.toggle-primary .p-togglebutton.p-button.p-highlight:enabled:active, ::ng-deep .cr-btn.toggle-primary .p-togglebutton.p-button.p-highlight:enabled:hover,
   ::ng-deep .cr-btn.toggle-primary .p-togglebutton.p-button:enabled:active,
   ::ng-deep .cr-btn.toggle-primary .p-togglebutton.p-button:enabled:hover, ::ng-deep .cr-btn.primary:enabled:active, ::ng-deep .cr-btn.primary:enabled:hover {
-    background: #7D000D;
-    border-color: #7D000D;
+    background: #009E9E;
+    border-color: #009E9E;
   }
   
   ::ng-deep .cr-btn.secondary {
     background-color: white;
-    color: #AF1E2D;
-    border-color: #AF1E2D;
+    color: #009E92;
+    border-color: #009E92;
   }
   
   ::ng-deep .cr-btn.secondary:enabled:active, ::ng-deep .cr-btn.secondary:enabled:hover {
     background-color: #fdf6f6;
-    color: #380000;
-    border-color: #380000;
+    color: #003800;
+    border-color: #003800;
   }
   
   ::ng-deep .cr-btn.link-button {
@@ -874,22 +879,22 @@
     background: transparent;
     width: auto;
     border: none;
-    color: #AF1E2D;
+    color: #009E92;
     padding: 0.5rem;
   }
   
   ::ng-deep .cr-btn.link-button .p-button {
     width: auto;
     border: none;
-    color: #AF1E2D;
+    color: #009E92;
     padding: 0.5rem;
     background-color: transparent;
   }
   
   ::ng-deep .cr-btn.link-button :enabled:hover {
-    background-color: #380000;
+    background-color: #003800;
     color: white;
-    border-color: #380000;
+    border-color: #003800;
   }
   
   ::ng-deep .cr-btn.link-icon {
@@ -899,12 +904,12 @@
     background: transparent;
     width: auto;
     border: none;
-    color: #AF1E2D;
+    color: #009E92;
     padding: 0.2rem;
   }
   
   ::ng-deep .cr-btn.link-icon:enabled:hover {
-    color: #380000;
+    color: #003800;
     background-color: transparent;
   }
   
@@ -917,15 +922,15 @@
     border: none;
     background: transparent;
     padding: 0.3rem;
-    background-color: #AF1E2D;
+    background-color: #009E92;
     color: white;
-    border: 1px solid #7D000D;
+    border: 1px solid #009E9E;
   }
   
   ::ng-deep .cr-btn.icon-only.p-button-icon-only:enabled:active, ::ng-deep .cr-btn.icon-only.p-button-icon-only:enabled:hover {
     color: white;
-    background: #7D000D;
-    border-color: #380000;
+    background: #009E9E;
+    border-color: #003800;
   }
   
   ::ng-deep .cr-btn.icon-only.p-button-icon-only:focus {
@@ -942,37 +947,37 @@
     padding: 0;
     border: none;
     background: transparent;
-    color: #AF1E2D;
+    color: #009E92;
     background-color: white;
-    border: 1px solid #AF1E2D;
+    border: 1px solid #009E92;
   }
   
   ::ng-deep .cr-btn.secondary-icon-only.p-button-icon-only:enabled:active, ::ng-deep .cr-btn.secondary-icon-only.p-button-icon-only:enabled:hover {
     background: white;
-    color: #380000;
-    border-color: #380000;
+    color: #003800;
+    border-color: #003800;
   }
   
   ::ng-deep .cr-btn.secondary-icon-only.p-button-icon-only:focus {
     box-shadow: none;
-    color: #7D000D;
+    color: #009E9E;
   }
   
   ::ng-deep .cr-btn.splitButton .p-splitbutton {
-    background-color: #AF1E2D;
+    background-color: #009E92;
   }
   
   ::ng-deep .cr-btn.splitButton .p-splitbutton .p-splitbutton-defaultbutton,
   ::ng-deep .cr-btn.splitButton .p-splitbutton .p-splitbutton-menubutton {
-    background-color: #AF1E2D;
+    background-color: #009E92;
     color: white;
   }
   
   ::ng-deep .cr-btn.splitButton .p-splitbutton .p-splitbutton-defaultbutton:enabled:active, ::ng-deep .cr-btn.splitButton .p-splitbutton .p-splitbutton-defaultbutton:enabled:hover,
   ::ng-deep .cr-btn.splitButton .p-splitbutton .p-splitbutton-menubutton:enabled:active,
   ::ng-deep .cr-btn.splitButton .p-splitbutton .p-splitbutton-menubutton:enabled:hover {
-    background: #7D000D;
-    border-color: #7D000D;
+    background: #009E9E;
+    border-color: #009E9E;
   }
   
   
@@ -990,7 +995,7 @@
   ::ng-deep .cr-btn.toggle .p-button:focus,
   ::ng-deep .cr-btn.toggle .p-togglebutton.p-button:focus {
     box-shadow: none;
-    color: #7D000D;
+    color: #009E9E;
   }
   
   ::ng-deep .cr-btn.toggle .p-button:not(.p-disabled):not(.p-highlight):hover,
@@ -1100,7 +1105,7 @@
   /** hack button main nav */
   .main-nav .p-button:enabled:active, .main-nav .p-button:enabled:hover {
     background-color: transparent !important;
-    color: #7D000D !important;
+    color: #009E9E !important;
   }
   
   /** tooltip */
@@ -1211,7 +1216,7 @@
   
   .p-contextmenu .p-menuitem.p-menuitem-active > .p-menuitem-link .p-submenu-icon,
   .p-contextmenu .p-menuitem.p-menuitem-active > .p-menuitem-link .p-menuitem-text {
-    color: #AF1E2D;
+    color: #009E92;
   }
   
   .scrollBar::-webkit-scrollbar-track {
@@ -1226,7 +1231,7 @@
   
   .scrollBar::-webkit-scrollbar-thumb {
     border-radius: 5px;
-    background-color: #AF1E2D;
+    background-color: #009E92;
   }
   
   /** SEARCHER */
@@ -1298,7 +1303,7 @@
   /** TABLE */
   .p-datatable .p-datatable-tbody > tr.p-highlight {
     background-color: #E5D7D9;
-    color: #7D000D;
+    color: #009E9E;
     font-weight: 700;
     padding-right: .5rem;
   }

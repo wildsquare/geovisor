@@ -6,27 +6,27 @@ import { Subject } from 'rxjs';
 })
 export class ComponentsService {
 
-    components = [];
+    components: any[] = [];
 
     verifyCaptchaComponent = new Subject<any>();
     public verifyCaptchaComponent$ = this.verifyCaptchaComponent.asObservable();
 
-    synopticContainer: ViewContainerRef;
-    noteSynopticContainer: ViewContainerRef;
-    menuContainer: ViewContainerRef;
-    registryContainer: ViewContainerRef;
-    locatorRegistryContainer: ViewContainerRef;
-    addFeatureContainer: ViewContainerRef;
-    alertsContainer: ViewContainerRef;
-    simpleNoteContainer: ViewContainerRef;
-    settingsContainer: ViewContainerRef;
-    helpContainer: ViewContainerRef;
-    coordinateFinderContainer: ViewContainerRef;
-    tocContainer: ViewContainerRef;
-    loadContextContainer: ViewContainerRef;
-    loadCardsContainer: ViewContainerRef;
-    detailLoadFilesContainer: ViewContainerRef;
-    LoadFilesAuxContainer: ViewContainerRef;
+    synopticContainer!: ViewContainerRef;
+    noteSynopticContainer!: ViewContainerRef;
+    menuContainer!: ViewContainerRef;
+    registryContainer!: ViewContainerRef;
+    locatorRegistryContainer!: ViewContainerRef;
+    addFeatureContainer!: ViewContainerRef;
+    alertsContainer!: ViewContainerRef;
+    simpleNoteContainer!: ViewContainerRef;
+    settingsContainer!: ViewContainerRef;
+    helpContainer!: ViewContainerRef;
+    coordinateFinderContainer!: ViewContainerRef;
+    tocContainer!: ViewContainerRef;
+    loadContextContainer!: ViewContainerRef;
+    loadCardsContainer!: ViewContainerRef;
+    detailLoadFilesContainer!: ViewContainerRef;
+    LoadFilesAuxContainer!: ViewContainerRef;
 
 
     constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
@@ -113,10 +113,6 @@ export class ComponentsService {
             container.remove(container.indexOf(component));
             this.components.splice(componentIndex, 1);
         }
-    }
-
-    verifyCaptcha(response) {
-        this.verifyCaptchaComponent.next(response);
     }
 
 }
