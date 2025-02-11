@@ -1,0 +1,234 @@
+body {
+    height: 100vh;
+    width: 100%;
+    margin: 0;
+    padding: 0;    
+}
+.p-buttonset:not(.p-splitbutton) .p-button {
+    border-top-left-radius: 0.3em;
+    border-top-right-radius: 0.3em;
+    border-bottom-left-radius: 0.3em;
+    border-bottom-right-radius: 0.3em;
+    height: 34px;
+    width: 34px;
+}
+.img-button {
+    border-radius: 16px;
+    opacity: 1;
+    padding: 5px;
+    transition: all 500ms ease-in-out;
+    background-color: white;
+}
+.img-button-lt {
+    border-radius: 12px;
+    transition: all 500ms ease-in-out;
+}
+.img-button:hover, .img-button-lt:hover {
+    cursor: pointer;
+    transform: scale(0.8);
+    opacity: 0.8;
+    box-shadow: 2px 2px 8px 1px var(--primary-900);
+}
+.img-button-tool {
+    border-radius: 25px;
+    transform: scale(0.8);
+    border-color: var(--primary-900);
+    border: 2px solid var(--primary-900);
+    background-color: var(--primary-900);
+    opacity: 1;
+    padding: 5px;
+    transition: all 500ms ease-in-out;
+}
+.img-button-tool:hover {
+    cursor: pointer;
+    transform: scale(0.6);
+    opacity: 0.8;
+    box-shadow: 2px 2px 8px 1px #043104;
+}
+.img-button-intro {
+    border-radius: 25px;
+    transform: scale(0.6);
+    border-color: #009E92;
+    border: 2px solid #009E92;
+    background-color: #009E92;
+    opacity: 0.8;
+    padding: 5px;
+    transition: all 500ms ease-in-out;
+}
+.img-button-intro:hover {
+    cursor: pointer;
+    transform: scale(0.8);
+    opacity: 1;
+    box-shadow: 2px 2px 8px 1px #043104;
+}
+.cdk-overlay-pane {
+    position: absolute;
+    pointer-events: auto;
+    box-sizing: border-box;
+    z-index: 1000;
+    display: grid;
+    max-width: 100%;
+    max-height: 100%;
+}
+body .p-overlaypanel {
+    background-color: rgba(196, 18, 48, 0.3);
+    color: transparent;
+    padding: 0;
+   /* border: 1px solid #c8c8c8;
+    */
+    border-radius: 0;
+}
+body .p-overlaypanel:after {
+    border-color: transparent;
+    border-bottom-color: transparent;
+}
+body .p-overlaypanel:before {
+    border-color: transparent;
+    border-bottom-color: transparent;
+}
+body .p-tabview.p-tabview-top .p-tabview-nav li.p-state-active:hover, body .p-tabview.p-tabview-bottom .p-tabview-nav li.p-state-active:hover, body .p-tabview.p-tabview-left .p-tabview-nav li.p-state-active:hover, body .p-tabview.p-tabview-right .p-tabview-nav li.p-state-active:hover {
+    border: 1px solid #707372;
+    background-color: #707372;
+}
+body .p-tabview.p-tabview-top .p-tabview-nav li.p-state-active, body .p-tabview.p-tabview-bottom .p-tabview-nav li.p-state-active, body .p-tabview.p-tabview-left .p-tabview-nav li.p-state-active, body .p-tabview.p-tabview-right .p-tabview-nav li.p-state-active {
+    background-color: #707372;
+    border: 1px solid #707372;
+}
+body .p-tabview .p-tabview-panels {
+    background-color: rgba(112, 115, 114, 0.3);
+    padding: 0.571em 1em;
+    border: 1px solid #c8c8c8;
+    color: #333;
+}
+body .p-widget {
+    font-family: NeoSansStd;
+    font-size: 12px;
+    text-decoration: none;
+}
+body .p-card {
+    background-color: rgba(112, 115, 114, 0.3);
+    height: inherit;
+}
+body .p-toolbar {
+    background-color: transparent;
+}
+.app-cadastre-overlay {
+    height: 100%;
+}
+.p-fileupload-content {
+    padding: 1em;
+    position: relative;
+    transition: border-color 0.3s;
+    height: -webkit-fill-available;
+}
+body .p-dropdown {
+    background: #fff;
+    border: 1px solid #a6a6a6;
+    transition: border-color 0.2s;
+    width: 100%;
+}
+.p-tabview-panel {
+    height: auto;
+}
+body .p-panel .p-panel-titlebar {
+    border: none;
+    background-color: white;
+}
+body .p-panel .p-panel-content {
+    border: none;
+    background-color: white;
+}
+body .p-panel .p-panel-footer {
+    border: none;
+    background-color: white;
+}
+body .p-paginator {
+    background-color: #f4f4f4;
+    border: none;
+    padding: 0;
+}
+body .p-table .p-table-tbody > tr > td {
+    background-color: inherit;
+    border: none;
+}
+.p-buttonset:not(.p-splitbutton) .p-button {
+    height: auto;
+    width: auto;
+}
+body .p-fileupload .p-fileupload-buttonbar {
+    border: none;
+}
+body .p-fileupload .p-fileupload-content {
+    border: none;
+    height: 100%;
+}
+.geometry-tooltip {
+    width: 220px;
+    max-height: 250px;
+}
+.toc-tooltip {
+    width: 150px;
+    max-height: 200px;
+}
+body .p-paginator {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    font-size: 9px;
+}
+body .p-fluid .p-autocomplete .p-autocomplete-dropdown.p-button {
+    z-index: 2000;
+}
+body .p-inplace .p-inplace-display:not(.p-state-disabled):hover {
+    background-color: transparent;
+    color: #06b01c;
+}
+.p-button:enabled:active, .p-button:enabled:hover {
+    background-color: #06b01c !important;
+    color: #fff !important;
+    border-color: #06b01c !important;
+}
+.simulate-list .p-button:enabled:active, .simulate-list .p-button:enabled:hover {
+    background-color: transparent !important;
+    color: #007d0d !important;
+    border-color: #06b01c !important;
+}
+.searcher .p-autocomplete .p-autocomplete-input {
+    width: 100%;
+}
+.mnuImg:hover {
+    cursor: pointer;
+}
+.p-fileupload-buttonbar {
+    text-align: center;
+}
+.p-fileupload-files {
+    margin-left: -45px;
+}
+body .p-chkbox .p-chkbox-box.p-state-active {
+    background-color: #009E92;
+    border-color: #009E92;
+}
+input[type="checkbox"]:checked {
+    background-color: #3a414c;
+}
+body .p-tree {
+    border: none;
+    background-color: #fff;
+    color: #333;
+}
+.p-sidebar-close {
+    font-size: 9px;
+}
+.p-col-12 {
+    padding: 0rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.2rem;
+}
+body {
+    font-family: NeoSansStd;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+}
