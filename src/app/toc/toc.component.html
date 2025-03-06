@@ -38,7 +38,7 @@
                     <td>
                         <div class="col-12">
                                 <h5 class="text-sm ml-1">Transparencia</h5>
-                                <p-slider [(ngModel)]="rowData.getProperties().layerProperties.opacity" [max]="100" [min]="0" [style]="{'padding':'3px'}" [animate]="true" (onChange)="hanleChangeSlide(rowData.getProperties().layerProperties.name, $event)"></p-slider>
+                                <p-slider [(ngModel)]="rowData.getProperties().layerProperties.opacity" (onChange)="handleChangeSlide(rowData)" [max]="100" [min]="0" [style]="{'padding':'3px'}" [animate]="true"></p-slider>
                         </div>
                     </td>
                 </tr>

@@ -111,8 +111,8 @@ export class TocComponent implements OnInit {
         }
     }
 
-    hanleChangeSlide(capa: any, event: any) {
-        this.layersService.setOpacityLayer(capa, event);
+    handleChangeSlide(capa: any) {
+        this.layersService.setOpacityLayer(capa.getProperties().layerProperties.name, capa.getProperties().layerProperties.opacity);
     }
 
 
