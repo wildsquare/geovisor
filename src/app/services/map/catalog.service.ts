@@ -13,7 +13,7 @@ import { NodeCatalog } from '../../models/catalog/nodeCatalog.model';
 export class CatalogService {
 
   urlsServices: ServicesCatalog[];
-  filesTree: TreeNode[];
+  filesTree!: TreeNode[];
   getServiceCapabilities = new Subject<any>();
   public getServiceCapabilities$ = this.getServiceCapabilities.asObservable();
 
@@ -22,62 +22,64 @@ export class CatalogService {
     this.urlsServices = new Array<ServicesCatalog>();
     // Estatales
     this.addCatalogService(
-      'Peligrosidad por Inundación',
-      'https://servicios.idee.es/wms-inspire/riesgos-naturales/inundaciones',
+      'Mapa Forestal de España',
+      'https://wms.mapama.gob.es/sig/Biodiversidad/MFE/wms.aspx?',
       'WMS',
-      'Estatales',
+      'Ecosistemas',
+      false
+    );
+
+    this.addCatalogService(
+      'Humedales',
+      'https://wms.mapama.gob.es/sig/Biodiversidad/Humedales/wms.aspx?',
+      'WMS',
+      'Ecosistemas',
+      false
+    );
+
+    this.addCatalogService(
+      'Humedales y Turberas',
+      'https://wms.mapama.gob.es/sig/Biodiversidad/Humedal_Turb/wms.aspx?',
+      'WMS',
+      'Ecosistemas',
       false
     );
     this.addCatalogService(
-      'Copernicus Land Monitoring Service',
-      'https://servicios.idee.es/wms/copernicus-landservice-spain',
+      'Riqueza de especies',
+      'https://wms.mapama.gob.es/sig/Biodiversidad/RiquezaEspecies/wms.aspx?',
       'WMS',
-      'Estatales',
+      'Fauna y Flora',
       false
     );
     this.addCatalogService(
-      'Ocupación del Suelo',
-      'https://servicios.idee.es/wms-inspire/ocupacion-suelo',
+      'Región de procedencia',
+      'https://wms.mapama.gob.es/sig/Biodiversidad/RegionProcedencia/wms.aspx?',
       'WMS',
-      'Estatales',
+      'Recursos genéticos',
       false
     );
     this.addCatalogService(
-      'Hidrografía - Información Geográfica de Referencia',
-      'https://servicios.idee.es/wms-inspire/hidrografia',
-      'WMS',
-      'Estatales',
-      false
-    );
-    /*this.addCatalogService(
-      'Agua - Aguas Subterráneas - Catálogo de Sondeos',
-      'http://wms.magrama.es/sig/Agua/Sondeos/wms.aspx',
-      'WMS',
-      'Estatales',
-      false
-    );*/
-    this.addCatalogService(
-      'Red de Transporte - Información Geográfica de Referencia',
-      'https://servicios.idee.es/wms-inspire/transportes',
-      'WMS',
-      'Estatales',
-      false
-    );
-    this.addCatalogService(
-      'Mapa Raster',
-      'https://www.ign.es/wmts/mapa-raster',
+      'Red Natura 2000',
+      'https://wmts.mapama.gob.es/sig/biodiversidad/red_natura/wmts',
       'WMTS',
-      'Estatales',
+      'Red Natura',
+      false
+    );
+    this.addCatalogService(
+      'Mdt',
+      'https://servicios.idee.es/wmts/mdt',
+      'WMTS',
+      'Estatal',
       false
     );
 
   }
 
-  addCatalogService(title, url, type, scope, info) {
-    if (this.urlsServices.find(service => (service.url === url))) {
+  addCatalogService(title: string, url: string, type: string, scope: string, info: boolean): void {
+    if (this.urlsServices.find((service: ServicesCatalog) => (service.url === url))) {
       //this.infoService.setInfo('duplicate_catalog', 'catalog');
     } else {
-      const catService = new ServicesCatalog();
+      const catService: ServicesCatalog = new ServicesCatalog();
       catService.title = title;
       catService.url = url;
       catService.type = type;
@@ -107,7 +109,7 @@ export class CatalogService {
   generateTreeNodeCatalog(catalogs: ServicesCatalog[]): any {
     const treeTableCatalog = new Array<NodeCatalog>();
 
-    const conCategory = this.getCatalogByCategory(catalogs, (a) => a.scope);
+    const conCategory: CatalogByCategory[] = this.getCatalogByCategory(catalogs, (a: ServicesCatalog) => a.scope);
 
     conCategory.map((categories: CatalogByCategory) => {
       const nodeCatalog = new NodeCatalog();
@@ -150,22 +152,22 @@ export class CatalogService {
         childNode.selectable = false;
         childNode.leaf = true;
         if (catalog.type === 'WMS') {
-          catalog.capabilities.Capability.Layer.Layer.map((lyr) => {
+            catalog.capabilities.Capability.Layer.Layer.map((lyr: { Title: string; Name: string }) => {
             const childCapabilitiesNode = new NodeCatalog();
             childCapabilitiesNode.label = lyr.Title;
             childCapabilitiesNode.data = lyr.Name;
             childCapabilitiesNode.type = catalog.type;
             childrenNodeLayer.push(childCapabilitiesNode);
-          });
+            });
           childNode.children = childrenNodeLayer.reverse();
         } else if (catalog.type === 'WMTS') {
-          catalog.capabilities.Contents.Layer.map((lyr) => {
+            catalog.capabilities.Contents.Layer.map((lyr: { Title: string; Identifier: string }) => {
             const childCapabilitiesNode = new NodeCatalog();
             childCapabilitiesNode.label = lyr.Title;
             childCapabilitiesNode.data = lyr.Identifier;
             childCapabilitiesNode.type = catalog.type;
             childrenNodeLayer.push(childCapabilitiesNode);
-          });
+            });
           childNode.children = childrenNodeLayer.reverse();
         }
 
@@ -181,21 +183,20 @@ export class CatalogService {
     // this.getContextsData.next([<TreeNode[]> treeCatalog, catalogs]);
   }
 
-  getCapabilities(service: ServicesCatalog, info) {
+  getCapabilities(service: ServicesCatalog, info: boolean): void {
     const self = this;
-    let params = new HttpParams();
+    let params: HttpParams = new HttpParams();
 
     params = params.append('request', 'getcapabilities');
     params = params.append('service', service.type);
     params = params.append('version', '1.1.0');
 
-
     this.http.get(service.url, { params, responseType: 'text' }).subscribe({
-      next(capabilities) {
+      next(capabilities: string) {
         if (capabilities) {
           if (service.type === 'WMS') {
             const parser = new WMSCapabilities();
-            const result = parser.read(capabilities);
+            const result: any = parser.read(capabilities);
             service.capabilities = result;
             self.urlsServices.push(service);
             if (info === true) {
@@ -204,7 +205,7 @@ export class CatalogService {
             self.getServiceCapabilities.next(self.urlsServices);
           } else if (service.type === 'WMTS') {
             const parser = new WMTSCapabilities();
-            const result = parser.read(capabilities);
+            const result: any = parser.read(capabilities);
             service.capabilities = result;
             self.urlsServices.push(service);
             if (info === true) {
@@ -215,11 +216,10 @@ export class CatalogService {
           // self.parseCapabilities(capabilities, service.type);
         }
       },
-      error(error) {
+      error(error: HttpErrorResponse) {
         self.handleError(error);
       }
-    }
-    );
+    });
   }
 
   handleError(error: HttpErrorResponse) {

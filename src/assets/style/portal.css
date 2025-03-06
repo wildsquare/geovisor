@@ -2,7 +2,7 @@ body {
     height: 100vh;
     width: 100%;
     margin: 0;
-    padding: 0;
+    padding: 0;    
 }
 .p-buttonset:not(.p-splitbutton) .p-button {
     border-top-left-radius: 0.3em;
@@ -43,14 +43,14 @@ body {
     cursor: pointer;
     transform: scale(0.6);
     opacity: 0.8;
-    box-shadow: 2px 2px 8px 1px #310404;
+    box-shadow: 2px 2px 8px 1px #043104;
 }
 .img-button-intro {
     border-radius: 25px;
     transform: scale(0.6);
-    border-color: #af1e2d;
-    border: 2px solid #af1e2d;
-    background-color: #af1e2d;
+    border-color: #009E92;
+    border: 2px solid #009E92;
+    background-color: #009E92;
     opacity: 0.8;
     padding: 5px;
     transition: all 500ms ease-in-out;
@@ -59,7 +59,7 @@ body {
     cursor: pointer;
     transform: scale(0.8);
     opacity: 1;
-    box-shadow: 2px 2px 8px 1px #310404;
+    box-shadow: 2px 2px 8px 1px #043104;
 }
 .cdk-overlay-pane {
     position: absolute;
@@ -181,17 +181,17 @@ body .p-fluid .p-autocomplete .p-autocomplete-dropdown.p-button {
 }
 body .p-inplace .p-inplace-display:not(.p-state-disabled):hover {
     background-color: transparent;
-    color: #b0061c;
+    color: #06b01c;
 }
 .p-button:enabled:active, .p-button:enabled:hover {
-    background-color: #b0061c !important;
+    background-color: #06b01c !important;
     color: #fff !important;
-    border-color: #b0061c !important;
+    border-color: #06b01c !important;
 }
 .simulate-list .p-button:enabled:active, .simulate-list .p-button:enabled:hover {
     background-color: transparent !important;
-    color: #7d000d !important;
-    border-color: #b0061c !important;
+    color: #007d0d !important;
+    border-color: #06b01c !important;
 }
 .searcher .p-autocomplete .p-autocomplete-input {
     width: 100%;
@@ -206,8 +206,8 @@ body .p-inplace .p-inplace-display:not(.p-state-disabled):hover {
     margin-left: -45px;
 }
 body .p-chkbox .p-chkbox-box.p-state-active {
-    background-color: #af1e2d;
-    border-color: #af1e2d;
+    background-color: #009E92;
+    border-color: #009E92;
 }
 input[type="checkbox"]:checked {
     background-color: #3a414c;

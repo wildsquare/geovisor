@@ -1,8 +1,6 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppRoutingModule } from './app-routing.module'; // Asegúrate de importar AppRoutingModule
-import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { SidebarModule } from 'primeng/sidebar';
@@ -14,6 +12,7 @@ import { ButtonModule } from 'primeng/button';
 import { TreeModule } from 'primeng/tree';
 import { DropdownModule } from 'primeng/dropdown';
 import { DockModule } from 'primeng/dock';
+import { SliderModule } from 'primeng/slider';
 import { TocComponent } from './toc/toc.component';
 import { TocMenuComponent } from './menu/toc-menu.component';
 import { TocOverlayComponent } from './overlay/toc-overlay.component';
@@ -31,12 +30,11 @@ export function initializeApp(): () => Promise<void> {
 
 @NgModule({
   declarations: [
-    AppComponent, TocOverlayComponent, TocMenuComponent, TocComponent, CatalogComponent, MapComponent
   ],
   imports: [
-    AppRoutingModule, BrowserModule, HttpClientModule, BrowserAnimationsModule, OverlayModule,
+    BrowserModule, BrowserAnimationsModule, OverlayModule,
     SidebarModule, TableModule, ScrollPanelModule, PanelModule, CheckboxModule, ButtonModule,
-    TreeModule, DropdownModule, DockModule
+    TreeModule, DropdownModule, DockModule, SliderModule
   ],
   providers: [
     {
@@ -46,6 +44,5 @@ export function initializeApp(): () => Promise<void> {
         multi: true
     }
 ],
-  bootstrap: [AppComponent]
 })
 export class AppModule { }

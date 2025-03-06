@@ -1,0 +1,19 @@
+<p-fileUpload
+  #fileUpLoader
+  mode="basic"
+  multiple="multiple"
+  name="myFile2[]"
+  [auto]="true"
+  customUpload="true"
+  url="./upload.php"
+  (uploadHandler)="myUploader($event)"
+  [showUploadButton]="false"
+  [showCancelButton]="false"
+  accept=""
+  maxFileSize="350000000"
+  fileLimit="10000"
+  class="simulate_pButton"
+  chooseLabel=""
+  chooseIcon="pi pi-upload" class="uploaderBtn navFont"
+  > 
+</p-fileUpload>

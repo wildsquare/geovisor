@@ -10,7 +10,6 @@ import Map from 'ol/Map';
 import Style from 'ol/style/Style';
 import * as OlProj4 from 'ol/proj/proj4';
 import proj4 from 'proj4';
-import {v4 as uuidv4} from 'uuid';
 import { Subscription, Subject } from 'rxjs';
 import { UtilsService } from '../core/utils.service';
 import TileSource from 'ol/source/Tile';
@@ -20,7 +19,8 @@ import LayerGroup from 'ol/layer/Group';
 import ImageLayer from 'ol/layer/Image';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
-import { Fill, Stroke } from 'ol/style';
+import { ServicesCatalog } from '../../models/catalog/servicesCatalog.model';
+import { StyleService } from './style.service';
 
 if (proj4) {
     proj4.defs('EPSG:3857',
@@ -39,21 +39,21 @@ OlProj4.register(proj4);
 })
 export class LayersService {
 
-    lyrOSM: TileLayer<TileSource>;
-    lyrPnoa: TileLayer<TileSource>;
-    lyrPnoaBase: TileLayer<TileSource>;
-    lyrPnoaWms: TileLayer<TileWMS>;
-    lyrPnoaBaseWms: TileLayer<TileWMS>;
-    lyrCatastro: ImageLayer<ImageWMS>;
-    lyrCatastroNavarra: ImageLayer<ImageWMS>;
-    lyrCatastroAlava: ImageLayer<ImageWMS>;
-    lyrCatastroVizcaya: ImageLayer<ImageWMS>;
-    lyrCatastroGuipuzcoa: ImageLayer<ImageWMS>;
-    lyrMdt: TileLayer<TileSource>;
-    lyrFincas: TileLayer<TileWMS>;
-    lyrCatastrosForales: LayerGroup;
+    lyrOSM!: TileLayer<TileSource>;
+    lyrPnoa!: TileLayer<TileSource>;
+    lyrPnoaBase!: TileLayer<TileSource>;
+    lyrPnoaWms!: TileLayer<TileWMS>;
+    lyrPnoaBaseWms!: TileLayer<TileWMS>;
+    lyrCatastro!: ImageLayer<ImageWMS>;
+    lyrCatastroNavarra!: ImageLayer<ImageWMS>;
+    lyrCatastroAlava!: ImageLayer<ImageWMS>;
+    lyrCatastroVizcaya!: ImageLayer<ImageWMS>;
+    lyrCatastroGuipuzcoa!: ImageLayer<ImageWMS>;
+    lyrMdt!: TileLayer<TileSource>;
+    lyrFincas!: TileLayer<TileWMS>;
+    lyrCatastrosForales!: LayerGroup;
 
-    map: Map;
+    map!: Map;
 
     vSourceDraw: any;
     vLayerDraw: any;
@@ -68,22 +68,24 @@ export class LayersService {
     vLayerMarkers: any;
 
     vSourceNeighbours: any;
-    vLayerNeighbours: VectorLayer<any>;
+    vLayerNeighbours!: VectorLayer<any>;
 
-    vSourceCadastre: VectorSource;
-    vLayerCadastre: VectorLayer<any>;
+    vSourceCadastre!: VectorSource;
+    vLayerCadastre!: VectorLayer<any>;
 
-    vSourceConflicts: VectorSource;
-    vLayerConflicts: VectorLayer<any>;
+    vSourceConflicts!: VectorSource;
+    vLayerConflicts!: VectorLayer<any>;
 
-    vSourceEmergencyData: VectorSource;
-    vLayerEmergencyData: VectorLayer<any>;
+    vSourceEmergencyData!: VectorSource;
+    vLayerEmergencyData!: VectorLayer<any>;
+
+    arrSelectedCatalog: ServicesCatalog[];
 
     shadowStyle = Style;
     parcelStyle = Style;
     buildingStyle = Style;
 
-    actionGetSldStyles: Subscription = null;
+    actionGetSldStyles: Subscription = new Subscription();
 
     addLayerToMap = new Subject<any>();
     public addLayerToMap$ = this.addLayerToMap.asObservable();
@@ -93,8 +95,8 @@ export class LayersService {
 
     lyrZIndex = 0;
 
-    currentLyrName: string;
-    currentFeatureLyrData;
+    currentLyrName!: string;
+    currentFeatureLyrData!: any;
 
     addFeatureInfoToMap = new Subject<any>();
     public addFeatureInfoToMap$ = this.addFeatureInfoToMap.asObservable();
@@ -115,22 +117,31 @@ export class LayersService {
     public showLayerIncendio$ = this.showLayerIncendio.asObservable();
 
     constructor(
-        protected http: HttpClient,
+        private http: HttpClient,
+        private styleService: StyleService,
         private utilsService: UtilsService,
     ) {
         const self = this;
+        this.arrSelectedCatalog = new Array<ServicesCatalog>()
 
         this.getOSMLayer();
-        // this.getLayerMdt();
         // this.getLyrWmsPNOA();
         this.getLyrWmsBasePNOA();
         this.getLyrXyzPNOA();
         this.getLyrCatastro();
-        this.getLyrCatastroNavarra();
-        this.getLyrCatastroAlava();
-        this.getLyrCatastroVizcaya();
-        this.getLyrCatastroGuipuzcoa();
-        this.getLayerGroupCadastres();
+
+        this.vSourceCadastre = new VectorSource();
+        this.vLayerCadastre = this.createLyrCadastre();
+        
+    }
+
+    createLyrCadastre(): VectorLayer<any> {
+        const lyr = new VectorLayer ({
+            source: this.vSourceCadastre,
+            style: this.styleService.styleFunction
+        });
+        lyr.setProperties({layerProperties: this.utilsService.setLayerProperties('lyrCadastre', 'Edición de parcelas', 'internal', true)});
+        return lyr;
     }
 
     setMap(map: Map) {
@@ -142,50 +153,49 @@ export class LayersService {
     }
 
     getLayers(): any[] {
+        this.lyrOSM.setZIndex(0);
+        this.lyrPnoaBaseWms.setZIndex(1);
+        this.lyrPnoa.setZIndex(2);
+        this.lyrCatastro.setZIndex(3);
+        this.vLayerCadastre.setZIndex(1002);
+
         const layers = [
             this.lyrOSM,
-            // this.lyrPnoaBase,
             this.lyrPnoaBaseWms,
             this.lyrPnoa,
             this.lyrCatastro,
-            this.lyrCatastrosForales
-
+            this.vLayerCadastre
         ];
         return layers;
     }
 
-    getInfoLayer(map: Map, coor) {
+    getInfoLayer(map: Map, coor: [number, number]): string {
         this.map = map;
         const arrLayers = this.map.getLayers();
         let url = '';
-        // let arrInfoNameLayers = new Array<string>();
-        arrLayers.getArray().map( (lyr: any) => {
-            // if (lyr.getSource().url_ === this.utilsService.GEOSERVER_WMS) {
+        arrLayers.getArray().map((lyr: any) => {
             if ((lyr.getProperties().layerProperties.queryable === true) && (lyr.getProperties().layerProperties.infoFeature === true)) {
                 this.currentLyrName = lyr.getProperties().layerProperties.title;
                 if (this.currentLyrName === 'Catastro') {
                     url = lyr.getSource().getFeatureInfoUrl(
                         coor,
                         this.map.getView().getResolution(),
-                        this.utilsService.epsg, {INFO_FORMAT: 'text/html'}
+                        this.utilsService.epsg, { INFO_FORMAT: 'text/html' }
                     );
-
                 } else {
                     url = lyr.getSource().getFeatureInfoUrl(
                         coor,
                         this.map.getView().getResolution(),
-                        this.utilsService.epsg, {INFO_FORMAT: 'application/json'}
+                        this.utilsService.epsg, { INFO_FORMAT: 'application/json' }
                     );
                 }
-
                 this.currentFeatureLyrData = this.getCurrentFeatureLyrData(url);
             }
-            // }
         });
         return url;
     }
 
-    getCurrentFeatureLyrData(url) {
+    getCurrentFeatureLyrData(url: string) {
         const self = this;
         this.http.get<any>(url).subscribe({
             next(data) {
@@ -199,7 +209,7 @@ export class LayersService {
         });
     }
 
-    getInfoVolcanoLyrData(url) {
+    getInfoVolcanoLyrData(url: string) {
         const self = this;
         this.http.get<any>(url).subscribe({
             next(data) {
@@ -213,7 +223,7 @@ export class LayersService {
         });
     }
 
-    getAreaVolcano(url) {
+    getAreaVolcano(url: string) {
         const self = this;
         this.http.get<any>(url).subscribe({
             next(data) {
@@ -227,7 +237,7 @@ export class LayersService {
         });
     }
 
-    getInfoEmergencyLyrData(url) {
+    getInfoEmergencyLyrData(url: string) {
         const self = this;
         this.http.get<any>(url).subscribe({
             next(data) {
@@ -242,13 +252,16 @@ export class LayersService {
     }
 
 
-    getOptionWMTS(catalog): any {
+    getOptionWMTS(catalog: any): any {
 
         const resolutions = new Array(30);
         const matrixIds  = new Array(30);
         const projection = OlProj.get('EPSG:4326');
-        const projectionExtent = projection.getExtent();
-        const size = OlExt.getWidth(projectionExtent) / 512;
+        const projectionExtent = projection ? projection.getExtent() : null;
+        if (!projectionExtent) {
+            throw new Error('Projection is null');
+        }
+        const size = projectionExtent ? OlExt.getWidth(projectionExtent) / 512 : 0;
         for (let z = 0; z < 29; ++z) {
             // generate resolutions and matrixIds arrays for this WMTS
             resolutions[z] = size / Math.pow(2, z);
@@ -260,9 +273,10 @@ export class LayersService {
             layer: catalog.activeLayers,
             TileMatrix: 30,
             format: 'image/jpeg',
-            projection,
+            projection: projection as OlProj.Projection,
+            matrixSet: 'EPSG:4326',
             tileGrid: new OlTileGrid({
-                origin: OlExt.getTopLeft(projectionExtent),
+                origin: OlExt.getTopLeft(projectionExtent as OlExt.Extent),
                 resolutions,
                 matrixIds
             }),
@@ -284,40 +298,45 @@ export class LayersService {
     }
 
     getLayerMdt() {
-        const resolutions = new Array(19);
-        const matrixIds  = new Array(19);
+        const resolutions = new Array(30);
+        const matrixIds  = new Array(30);
         const projection = OlProj.get('EPSG:4326');
-        const projectionExtent = projection.getExtent();
-        const size = OlExt.getWidth(projectionExtent) / 512;
-        for (let z = 0; z < 19; ++z) {
+        const projectionExtent = projection ? projection.getExtent() : null;
+        if (!projectionExtent) {
+            throw new Error('Projection is null');
+        }
+        const size = projectionExtent ? OlExt.getWidth(projectionExtent) / 512 : 0;
+        for (let z = 0; z < 29; ++z) {
             // generate resolutions and matrixIds arrays for this WMTS
             resolutions[z] = size / Math.pow(2, z);
             matrixIds[z] = 'EPSG:4326:' + z;
         }
 
+        const options = {
+            url: 'http://servicios.idee.es/wmts/mdt',
+            layer: 'EL.GridCoverage',
+            TileMatrix: 30,
+            format: 'image/jpeg',
+            projection: projection as OlProj.Projection,
+            matrixSet: 'EPSG:4326',
+            tileGrid: new OlTileGrid({
+                origin: OlExt.getTopLeft(projectionExtent as OlExt.Extent),
+                resolutions,
+                matrixIds
+            }),
+            style: 'default',
+            wrapX: true
+        };
+
         this.lyrMdt = new TileLayer({
             opacity: 1,
-            source: new WMTS({
-                url: 'http://servicios.idee.es/wmts/mdt',
-                layer: 'EL.GridCoverage',
-                matrixSet: 'EPSG:4326',
-                format: 'image/png',
-                projection,
-                tileGrid: new OlTileGrid({
-                    origin: OlExt.getTopLeft(projectionExtent),
-                    resolutions,
-                    matrixIds
-                }),
-                style: 'default',
-                wrapX: true
-            })
+            source: new WMTS(options)
         });
 
         this.lyrMdt.setProperties({layerProperties:
-      this.utilsService.setLayerProperties('MDT', 'MDT', 'base', false, false, false)
+      this.utilsService.setLayerProperties('MDT', 'MDT', 'base', true, true)
         });
     }
-
 
     getLyrCatastro() {
         this.lyrCatastro = new ImageLayer({
@@ -371,8 +390,8 @@ export class LayersService {
                     true,
                     false,
                     [
-                        this.lyrCatastroNavarra.getProperties().layerProperties.legend,
-                        this.lyrCatastroGuipuzcoa.getProperties().layerProperties.legend
+                        this.lyrCatastroNavarra.getProperties()['layerProperties'].legend,
+                        this.lyrCatastroGuipuzcoa.getProperties()['layerProperties'].legend
                     ]
                 )
             }
@@ -441,7 +460,7 @@ export class LayersService {
               true,
               true,
               false,
-              null
+              undefined
           )
             }
         );
@@ -566,7 +585,7 @@ export class LayersService {
         this.lyrPnoa.setProperties(
             {
                 layerProperties:
-        this.utilsService.setLayerProperties('PNOA TMS', 'Ortofotografía Aérea', 'base', this.lyrPnoa.getVisible(), true, false, false, null, metadata)
+        this.utilsService.setLayerProperties('PNOA TMS', 'Ortofotografía Aérea', 'base', this.lyrPnoa.getVisible(), true, false, false, undefined, metadata)
             }
         );
     }
@@ -620,9 +639,129 @@ export class LayersService {
         this.lyrPnoaBase.setProperties(
             {
                 layerProperties:
-        this.utilsService.setLayerProperties('PNOA BASE', 'Base IGN', 'base', this.lyrPnoaBase.getVisible(), true, false, false, null, metadata)
+        this.utilsService.setLayerProperties('PNOA BASE', 'Base IGN', 'base', this.lyrPnoaBase.getVisible(), true, false, false, undefined, metadata)
             }
         );
+    }
+
+    addLayerFromCatalog(catalog: ServicesCatalog, info: boolean) {
+        let lyrCat = null;
+        if (catalog.type === 'WMS') {
+            lyrCat = new TileLayer({
+                source: new TileWMS ({
+                    url: catalog.url,
+                    params: {
+                        LAYERS: catalog.activeLayers,
+                        VERSION: catalog.capabilities.version
+                    }
+                }),
+                visible: true
+            });
+
+            // lyrCat.values_.zIndex = this.lyrZIndex++;
+
+            let legUrl: string[] | undefined;
+            let lyrMetadata: string[] | undefined;
+
+            catalog.activeLayers.map((lyrCatalog) => {
+                const capLayer: any = catalog.capabilities.Capability.Layer.Layer.find((lyr: any) => (lyr.Name === lyrCatalog));
+                if (capLayer) {
+
+                    if (capLayer.DataURL) {
+                        if (lyrMetadata === undefined) {
+                            lyrMetadata = new Array<string>();
+                            lyrMetadata.push(capLayer.DataURL[0].OnlineResource);
+                        } else {
+                            if (!lyrMetadata.find(lyr => (lyr === capLayer.DataURL[0].OnlineResource))) {
+                                lyrMetadata.push(capLayer.DataURL[0]);
+                            }
+                        }
+                    }
+
+                    if (capLayer.MetadataURL) {
+                        if (lyrMetadata === undefined) {
+                            lyrMetadata = new Array<string>();
+                            lyrMetadata.push(capLayer.MetadataURL[0].OnlineResource);
+                        } else {
+                            if (!lyrMetadata.find(lyr => (lyr === capLayer.MetadataURL[0].OnlineResource))) {
+                                lyrMetadata.push(capLayer.MetadataURL[0].OnlineResource);
+                            }
+                        }
+                    }
+
+                    if (capLayer.Style) {
+                        if (capLayer.Style[0].LegendURL) {
+                            if (legUrl === undefined) {
+                                legUrl = new Array<string>();
+                                legUrl.push(capLayer.Style[0].LegendURL[0].OnlineResource);
+                            } else {
+                                if (!legUrl.find(lyr => (lyr === capLayer.Style[0].LegendURL[0].OnlineResource))) {
+                                    legUrl.push(capLayer.Style[0].LegendURL[0].OnlineResource);
+                                }
+                            }
+                        }
+                    }
+
+                }
+            });
+
+            lyrCat.setProperties(
+                {
+                    layerProperties:
+            this.utilsService.setLayerProperties(
+                catalog.title,
+                catalog.activeLayers[0],
+                'info', lyrCat.getVisible(),
+                true,
+                lyrCat.get('queryable'),
+                false,
+                legUrl,
+                lyrMetadata
+            )
+                }
+            );
+        } else if (catalog.type === 'WMTS') {
+            let options = optionsFromCapabilities(catalog.capabilities, {
+                layer: catalog.activeLayers,
+                matrixSet: 'EPSG:4326'
+            });
+
+            if (options === null) {
+                options = this.getOptionWMTS(catalog);
+                if (options === null) {
+                    throw new Error('Projection is null');;
+                }
+            } 
+
+            lyrCat = new TileLayer({
+                opacity: 1,
+                source: new WMTS(options)
+            });
+
+            lyrCat.setProperties(
+                {
+                    layerProperties :
+                this.utilsService.setLayerProperties(
+                    catalog.title, catalog.activeLayers[0], 'info', lyrCat.getVisible(), true
+                )
+                }
+            );
+        }
+        /*this.lyrZIndex++;
+    lyrCat.values_.zIndex = this.lyrZIndex;
+    this.map.addLayer(lyrCat);*/
+        for (let i = 2; i < this.map.getLayers().getArray().length - 1; i++) {
+            this.map.getLayers().getArray()[i].setZIndex(i + 1);
+        }
+        if (lyrCat) {
+            lyrCat.setZIndex(2);
+        } else {
+            throw new Error('Layer is null');
+        }
+        this.map.addLayer(lyrCat);
+
+        this.addLayerToMap.next(true);
+
     }
 
     setVisibleLayer(lyrName: string) {
@@ -645,7 +784,7 @@ export class LayersService {
         if (lyrVisibility) {
             if (lyrVisibility.getProperties().layerProperties.type === 'group') {
                 lyrVisibility.setVisible(visible);
-                lyrVisibility.getProperties().layers.forEach((lyr) => {
+                lyrVisibility.getProperties().layers.forEach((lyr: Layer) => {
                     lyr.setVisible(visible);
                 });
             } else {
@@ -657,12 +796,9 @@ export class LayersService {
     getVisibilityLayer(lyrName: string): boolean {
         const lyrVisibility = this.getLayerBy(this.map, 'name', lyrName);
         if (lyrVisibility) {
-            if (lyrVisibility.getVisible() === true) {
-                return true;
-            } else {
-                return false;
-            }
+            return lyrVisibility.getVisible() === true;
         }
+        return false;
     }
 
     setOpacityLayer(lyrName: string, opacity: number) {
@@ -690,7 +826,7 @@ export class LayersService {
 
     getLayerBy(map: any, key: any, value: any): any { // TODO Group layers
         const layers = map.getLayers().getArray();
-        const layer = layers.find(l => l.getProperties().layerProperties[key] === value);
+        const layer: Layer | undefined = layers.find((l: Layer) => l.getProperties()['layerProperties'][key] === value);
         return layer;
     }
 

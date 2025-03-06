@@ -1,30 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
-
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
-  
-
-  constructor(
-    private router: Router
-    ) { }
-
-  ngOnInit(): void {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        const tree = this.router.parseUrl(this.router.url);
-        if (tree.fragment) {
-          const element = document.getElementById(tree.fragment);
-          if (element) { element.scrollIntoView(); }
-        }
-      }
-    });
-
-  }
-
+export class AppComponent {
+  title = 'wildsquare';
 }

@@ -1,0 +1,36 @@
+<article class="cr-layers">
+    <section class="cr-layers__content">
+        <p-scrollPanel >
+            <p-table [columns]="cols" [value]="parcels" dataKey="name" 
+                selectionMode="single" 
+                [metaKeySelection]="false"
+                (onRowSelect)="onRowSelect($event.data)">
+                <ng-template #body let-rowData let-expanded="expanded" let-columns="columns" let-index="rowIndex">
+                    <tr>
+                        <td [pSelectableRow]="rowData">
+                            <div class="flex align-items-center text-sm" >                               
+                                <p-button type="button" [pRowToggler]="rowData" pRipple [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />                 
+                                {{ rowData.title }}
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template #expandedrow let-rowData let-columns="columns">
+                    <tr>
+                        <td>
+                            <div class="col-12 text-sm">
+                                Proyecto: {{rowData.projectTitle}}
+                            </div>
+                            <div class="col-12t ext-sm">
+                                Superficie: {{rowData.area | number:'1.2-2'}} m2
+                            </div>
+                            <div class="col-12 text-sm">
+                                Fecha de Actualización: 01/05/2024
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-scrollPanel>
+    </section>
+</article>
