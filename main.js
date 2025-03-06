@@ -98527,10 +98527,10 @@ function TocComponent_ng_template_7_Template(rf, ctx) {
       \u0275\u0275twoWayBindingSet(rowData_r8.getProperties().layerProperties.opacity, $event) || (rowData_r8.getProperties().layerProperties.opacity = $event);
       return \u0275\u0275resetView($event);
     });
-    \u0275\u0275listener("onChange", function TocComponent_ng_template_7_Template_p_slider_onChange_5_listener($event) {
+    \u0275\u0275listener("onChange", function TocComponent_ng_template_7_Template_p_slider_onChange_5_listener() {
       const rowData_r8 = \u0275\u0275restoreView(_r7).$implicit;
       const ctx_r3 = \u0275\u0275nextContext();
-      return \u0275\u0275resetView(ctx_r3.hanleChangeSlide(rowData_r8.getProperties().layerProperties.name, $event));
+      return \u0275\u0275resetView(ctx_r3.handleChangeSlide(rowData_r8));
     });
     \u0275\u0275elementEnd()()()();
     \u0275\u0275elementStart(6, "tr")(7, "td")(8, "div", 19)(9, "button", 22);
@@ -98631,8 +98631,8 @@ var TocComponent = class _TocComponent {
       this.arrLayers[this.totalRecords - 1].getProperties().layerProperties.last = true;
     }
   }
-  hanleChangeSlide(capa, event2) {
-    this.layersService.setOpacityLayer(capa, event2);
+  handleChangeSlide(capa) {
+    this.layersService.setOpacityLayer(capa.getProperties().layerProperties.name, capa.getProperties().layerProperties.opacity);
   }
   handleChangeChk(capa) {
     this.layersService.setVisibilityLayer(capa.getProperties()["layerProperties"].name);
