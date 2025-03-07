@@ -1,7 +1,7 @@
 {
   "version": 3,
   "sources": ["src/app/login/login.component.css"],
-  "sourcesContent": ["p-card {\n    margin: auto;\n    border-radius: 12px;\n  }"],
+  "sourcesContent": ["p-card {\r\n    margin: auto;\r\n    border-radius: 12px;\r\n  }"],
   "mappings": ";AAAA;AACI,UAAQ;AACR,iBAAe;AACjB;",
   "names": []
 }
